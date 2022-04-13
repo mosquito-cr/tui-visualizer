@@ -2,6 +2,8 @@
 
 This is an minimal implementation of a queue visualizer for [mosquito](https://github.com/mosquito-cr/mosquito). It is a Text based User Interface (TUI).
 
+<img width="832" alt="image" src="https://user-images.githubusercontent.com/208647/163231172-7a8c278a-d7f2-4983-badb-56d4a11a72e7.png">
+
 ## Purpose
 
 This repository is primarily an experiment on basic queue visualization. It primarily serves as a testing ground for methods which need to be added to mosquito core to facilitate this kind of work. In the mean time, it can also be used to get some idea that things are happening in a deployed worker, and the rate at which they are happening.
