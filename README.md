@@ -1,6 +1,6 @@
 # TUI Visualizer for Mosquito
 
-This is an minimal implementation of a queue visualizer for [mosquito](https://github.com/mosquito-cr/mosquito). It is a Text based User Interface (TUI).
+This is an minimal implementation of a queue visualizer for [mosquito](https://github.com/mosquito-cr/mosquito). It is a [Text based User Interface (TUI)](https://github.com/robacarp/keimeno).
 
 <img width="832" alt="image" src="https://user-images.githubusercontent.com/208647/163231172-7a8c278a-d7f2-4983-badb-56d4a11a72e7.png">
 
@@ -20,7 +20,7 @@ $ cd tui_visualizer
 $ shards install
 ```
 
-- Provide REDIS_URL connection string as `REDIS_ENV` environment variable
+- Provide REDIS_URL connection string as `REDIS_ENV` environment variable. If needed, the connection can be piped over [SSH with a tunnel](https://duckduckgo.com/?q=ssh+tunnel&ia=web). In a production environment, you'll need to provide your auth key here in this url (and perhaps an acl user as well).
 
 ```console
 $ export REDIS_URL 'redis://localhost:6379/2'
