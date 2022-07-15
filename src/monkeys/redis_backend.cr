@@ -20,6 +20,13 @@ module Mosquito
     def scheduled_task_time(task : Task)
       Redis.instance.zscore scheduled_q, task.id
     end
+
+    def self.list_runners : Array(String)
+      runner_prefix = "mosquito:runners:"
+      Redis.instance.keys("#{runner_prefix}*")
+        .map(&.as(String))
+        .map(&.sub(runner_prefix, ""))
+    end
   end
 end
 

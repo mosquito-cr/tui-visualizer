@@ -1,4 +1,5 @@
 require "mosquito"
+require "./src/monkeys/*"
 
 Mosquito.configure do |settings|
   settings.redis_url = (ENV["REDIS_URL"]? || "redis://localhost:6379")
@@ -41,7 +42,8 @@ class EveryThreeSecondsJob < Mosquito::PeriodicJob
   run_every 3.seconds
 
   def perform
-    log "I'm running every 3 seconds"
+    log "I'm running every 3 seconds, taking 1 second"
+    sleep 1
   end
 end
 

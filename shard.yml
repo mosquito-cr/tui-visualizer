@@ -9,4 +9,3 @@ dependencies:
     version: ~> 1.0.0.rc2
   keimeno:
     github: robacarp/keimeno
-    # path: ../../mosquito-cr/mosquito

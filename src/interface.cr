@@ -4,13 +4,36 @@
 # │   │
 # └───┘
 
+require "keimeno"
+
+class List
+  def self.render(title, collection, *, indent = 0)
+    count = collection.size
+    prefix = "│" * indent
+
+    puts title
+
+    collection.each.with_index do |e, i|
+      if i == count - 1
+        print "└"
+      else
+        print "├"
+      end
+
+      print yield e
+      puts
+    end
+  end
+end
+
 class MosquitoInterface < Keimeno::Base
-  @queues : Array(Mosquito::Queue)
+  @queues : Array(Mosquito::Inspector::Queue)
   @last_update : Time
 
   def initialize
     @full_screen = true
-    @queues = [] of Mosquito::Queue
+    @queues = [] of Mosquito::Inspector::Queue
+    @runners = [] of Mosquito::Inspector::Runner
     @last_update = Time::UNIX_EPOCH
   end
 
@@ -24,13 +47,15 @@ class MosquitoInterface < Keimeno::Base
     if dwell > INTERVAL
       @last_update = now
 
-      Mosquito.backend.list_queues
-        .map { |name| Mosquito::Queue.new name }
+      Mosquito::Inspector.list_queues
         .reject { |q| @queues.includes? q }
         .each { |q| @queues.push q }
+
+      Mosquito::Inspector.list_runners
+        .reject { |runner| @runners.includes? runner }
+        .each { |runner| @runners.push runner }
     else
       sleep_time = INTERVAL - dwell
-      # puts "sleeping for: #{sleep_time}"
       sleep sleep_time
     end
   end
@@ -38,46 +63,35 @@ class MosquitoInterface < Keimeno::Base
   def display
     banner
 
-    @queues.each.with_index do |queue, index|
-      if index == 0
-        print "┌"
-      else
-        print "├"
-      end
+    List.render("#{@runners.size} Runners: ", @runners) do |runner|
+      "#{runner.name[-4..]} #{runner.last_active}"
+    end
 
-      puts "#{queue.name} (Q)"
+    puts
 
-      task_ids = [] of {String, String} # task, status
+    List.render("#{@queues.size} Queues:", @queues) do |queue|
+      s = queue.name
+      s += ' '
 
-      {% for name in ["waiting", "scheduled", "pending", "dead"] %}
-        queue.backend.dump_{{name.id}}_q.each do |task_id|
-          task_ids << {task_id, {{ name }}}
-        end
+      {% for name in ["scheduled", "waiting", "pending", "dead"] %}
+        s += {{ name }}[0].upcase
+        s += queue.{{name.id}}_tasks.size.to_s
+        s += ' '
       {% end %}
 
-      tasks = task_ids.compact_map do |task_id, status|
-        retrieved_task = Mosquito::Task.retrieve(task_id)
-
-        if retrieved_task
-          {retrieved_task, status}
-        else
-          nil
-        end
-      end
-
-      last_index = tasks.size - 1
-      tasks.each_with_index do |(task, status), index|
-        if index == last_index
-          print "│└"
-        else
-          print "│├"
-        end
-
-        puts "#{task.id} (#{task.type}, #{status}, enqueued #{decode_time_ago task.enqueue_time})"
-      end
-
-      puts "│"
+      s
     end
+
+      # tasks = [] of Mosquito::Inspector::Task
+
+
+      # last_index = tasks.size - 1
+      # tasks.each_with_index do |task, index|
+      #   puts "#{task.id} (#{task.type}, #{task.status}" #, enqueued #{decode_time_ago task.enqueue_time})"
+      # end
+
+      # puts "│"
+    puts
   end
 
   def banner

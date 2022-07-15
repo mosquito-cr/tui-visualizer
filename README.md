@@ -6,11 +6,16 @@ This is an minimal implementation of a queue visualizer for [mosquito](https://g
 
 ## Purpose
 
-This repository is primarily an experiment on basic queue visualization. It primarily serves as a testing ground for methods which need to be added to mosquito core to facilitate this kind of work. In the mean time, it can also be used to get some idea that things are happening in a deployed worker, and the rate at which they are happening.
+This repository is primarily an experiment on basic queue visualization. It
+primarily serves as a testing ground for methods which need to be added to
+mosquito core to facilitate this kind of work. In the mean time, it can also be
+used to get some idea that things are happening in a deployed worker, and the
+rate at which they are happening.
 
 ## Using the visualizer
 
-Using the visualizer to query a running mosquito backend is straightforward. This will increase the read-load on the backend slightly.
+Using the visualizer to query a running mosquito backend is straightforward.
+This will increase the read-load on the backend slightly.
 
 - Clone the visualizer and install shards:
 
@@ -20,7 +25,11 @@ $ cd tui_visualizer
 $ shards install
 ```
 
-- Provide REDIS_URL connection string as `REDIS_ENV` environment variable. If needed, the connection can be piped over [SSH with a tunnel](https://duckduckgo.com/?q=ssh+tunnel&ia=web). In a production environment, you'll need to provide your auth key here in this url (and perhaps an acl user as well).
+- Provide REDIS_URL connection string as `REDIS_ENV` environment variable. If
+  needed, the connection can be piped over [SSH with a
+  tunnel](https://duckduckgo.com/?q=ssh+tunnel&ia=web). In a production
+  environment, you'll need to provide your auth key here in this url (and
+  perhaps an acl user as well).
 
 ```console
 $ export REDIS_URL 'redis://localhost:6379/2'
@@ -33,5 +42,7 @@ $ crystal run ./interface.cr
 
 ## Developing the visualizer
 
-A utility script is provided to enqueue and execute some jobs, which is convenient for working on the visualizer. Use `crystal run ambient_runner.cr` to run it.
+A utility script is provided to enqueue and execute some jobs, which is
+convenient for working on the visualizer. Use `crystal run interactive_runner.cr`
+to run it.
 
