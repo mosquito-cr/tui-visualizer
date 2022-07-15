@@ -23,21 +23,10 @@ module Mosquito::Inspector
       Task.new task_id
     end
 
-    def last_active : String
+    def last_heartbeat : Time?
       unix_ms = config["heartbeat_at"]?
-      return "heartbeat expired" unless unix_ms
-      timestamp = Time.unix(unix_ms.to_i)
-
-      seconds = (Time.utc - timestamp).total_seconds.to_i
-      "seen #{seconds}s ago"
-    end
-
-    def status : String
-      if task = current_task
-        "task: #{task.type}"
-      else
-        "not working"
-      end
+      return unless unix_ms && ! unix_ms.blank?
+      Time.unix(unix_ms.to_i)
     end
   end
 end
