@@ -1,9 +1,8 @@
 module Mosquito::Inspector
   class Task
     getter id : String
-    getter status : String
 
-    def initialize(@id : String, @status : String)
+    def initialize(@id : String)
     end
 
     def config_key

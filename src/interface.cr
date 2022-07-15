@@ -64,7 +64,7 @@ class MosquitoInterface < Keimeno::Base
     banner
 
     List.render("#{@runners.size} Runners: ", @runners) do |runner|
-      "#{runner.name[-4..]} #{runner.last_active}"
+      "#{runner.name[-4..]} #{runner.last_active} #{runner.status}"
     end
 
     puts

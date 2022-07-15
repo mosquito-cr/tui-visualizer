@@ -13,7 +13,7 @@ module Mosquito::Inspector
     {% for name in ["waiting", "scheduled", "pending", "dead"] %}
       def {{name.id}}_tasks : Array(Task)
         backend.dump_{{name.id}}_q
-          .map { |task_id| Task.new task_id, {{ name }} }
+          .map { |task_id| Task.new task_id }
       end
     {% end %}
 
